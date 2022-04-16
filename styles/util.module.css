@@ -1,0 +1,63 @@
+.primary-button {
+  width: 100%;
+  padding: .7rem;
+  margin-top: 1rem;
+  border: none;
+  border-radius: 7px;
+  background-color: #2F80ED;
+  color: white;
+  cursor: pointer;
+  font-size: medium;
+}
+
+.primary-button:hover {
+  background-color: #276bc4;
+}
+
+.oauth {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgb(80, 80, 80);
+  color: rgb(80, 80, 80);
+  font-size: large;
+  border-radius: 100%;
+  width: 2.5rem;
+  height: 2.5rem;
+  cursor: pointer;
+}
+
+.oauth:hover {
+  border: 1px solid #276bc4;
+  color: #276bc4;
+  background-color: #276bc409;
+}
+
+.error-message {
+  font-size: .8rem;
+  color: red;
+}
+
+.logo-container {
+  position: relative;
+  overflow: hidden;
+  width: 40%;
+  height: 2rem;
+  z-index: 10;
+}
+
+.logo-container--sm {
+  position: relative;
+  overflow: hidden;
+  width: 10%;
+  height: 2rem;
+  z-index: 10;
+}
+
+.pfp-container--sm {
+  position: relative;
+  overflow: hidden;
+  border-radius: 5px;
+  width: 30px;
+  height: 30px;
+}

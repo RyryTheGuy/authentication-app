@@ -1,0 +1,24 @@
+User story: I can register a new account
+User story: I can log in
+User story: I can log in or register with at least one of the following services: Google, Facebook, Twitter or Github
+User story: I can sign out
+User story: I can see my profile details
+User story: I can edit my details including: photo, name, bio, phone, email and password
+User story: I can upload a new photo or provide an image URL
+
+NextAuth for login management (Email, Facebook, Google, Twitter, and Github)
+SendPulse for SMTP (Simple Mail Transfer Protocol: used to send emails to users)
+MongoDB for storing User data
+Firebase storage for storing User image (if they upload one)
+
+Creating an account will just be email and password, which NextAuth will send an email to the given email to verify
+
+User Model : {
+  Id?
+  name: string
+  email: string/id
+  image: string
+  password?: string (hashed) // Only Credential accounts need a password
+  bio: string
+  phone: string
+}

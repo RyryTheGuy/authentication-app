@@ -1,0 +1,30 @@
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 8vh;
+
+  display: flex; 
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 4rem;
+
+  border: solid black 1px;
+}
+
+.user_dropdown {
+  position: relative;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 8rem;
+  cursor: pointer;
+
+  /* Disables text highlight */
+  user-select: none; /* supported by Chrome and Opera */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+}

@@ -1,0 +1,24 @@
+.container {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+}
+
+.border-container {
+  border: 1px solid gray;
+  border-radius: 24px;
+  padding: 2rem 3rem;
+
+  min-width: 25rem;
+  max-width: 32rem;
+  width: 100%;
+}
+
+.oauth-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}

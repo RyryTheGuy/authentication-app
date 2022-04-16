@@ -1,0 +1,26 @@
+.form-input {
+  display: flex;
+  align-items: center;
+  padding: 3px;
+  margin: .7rem 0;
+  width: 100%;
+  border-radius: 7px;
+  border: 2px gray solid;
+  font-size: 1.2rem;
+}
+
+.form-input:focus-within {
+  border: #2F80ED 2px solid;
+}
+
+.form-input__icon {
+  color: gray;
+  padding: 0 .5rem;
+}
+
+.form-input__input {
+  height: 2rem;
+  border: none;
+  outline: none;
+  width: 100%;
+}
