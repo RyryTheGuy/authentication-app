@@ -25,7 +25,7 @@ export default function Navbar( { user }: { user: User } ) {
           className={styles[ 'user_dropdown' ]}
           onClick={() => setIsDropdownActive( !isDropdownActive )}
         >
-          {/* User Icon */}
+          {/* User Icon & Name */}
           <div className={utilStyles[ 'pfp-container--sm' ]}>
             <Image src={missingPfp} alt='Your profile picture' layout='fill' />
           </div>
@@ -33,8 +33,7 @@ export default function Navbar( { user }: { user: User } ) {
           {renderDropdownArrow()}
 
           {/* Dropdown */}
-          {/* todo: redo this so clicking outside the dropdown will close it (JS eventlisteners) */}
-          {isDropdownActive && <UserDropdown id={user.id} />}
+          {isDropdownActive && <UserDropdown user={user} handleDropdownClose={setIsDropdownActive} />}
         </div>
       </nav>
     </>

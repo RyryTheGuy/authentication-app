@@ -1,11 +1,31 @@
+import React from "react";
+import { User } from "next-auth";
 import { signOut } from "next-auth/react";
 import Link from "next/link"
 import styles from './UserDropdown.module.css';
 
-export function UserDropdown( { id }: { id: string } ) {
+interface Props {
+  user: User;
+  handleDropdownClose: ( close: boolean ) => void;
+}
+
+export function UserDropdown( { user, handleDropdownClose }: Props ) {
+  const dropdownContainer = React.useRef<HTMLDivElement>( null );
+
+  React.useEffect( () => {
+    const closeDropdown = () => {
+      handleDropdownClose( false );
+    }
+
+    window.addEventListener( 'click', closeDropdown );
+
+    // Cleanup for the event listener
+    return () => window.removeEventListener( 'click', closeDropdown );
+  }, [ handleDropdownClose ] )
+
   return (
-    <div className={styles[ 'dropdown-container' ]}>
-      <Link href={`/profile/${id}`}>
+    <div className={styles[ 'dropdown-container' ]} ref={dropdownContainer}>
+      <Link href={`/profile/${user.id}`}>
         <a className={styles[ 'dropdown-container__options' ]}>
           <i className="fas fa-user"></i>
           My Profile
