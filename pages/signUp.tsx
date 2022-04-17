@@ -1,7 +1,7 @@
 import React from "react";
 import Head from "next/head";
 import Script from "next/script";
-import { ClientSafeProvider, getProviders } from 'next-auth/react';
+import { ClientSafeProvider, getProviders, getSession } from 'next-auth/react';
 import OAuthButton from "../components/OAuthButton/OAuthButton";
 import utilStyles from '../styles/util.module.css';
 import styles from '../styles/FormPage.module.css';
@@ -49,6 +49,17 @@ export default SignUp;
 
 export async function getServerSideProps( context ) {
   const providers = await getProviders();
+
+  // We don't want logged in users to access the log in page
+  const session = await getSession( context );
+  if ( session ) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    }
+  }
 
   return {
     props: {
