@@ -66,8 +66,12 @@ export default NextAuth({
   ],
   callbacks: {
     jwt: async ({ token, account, user }) => {
-      if (account) {
+      if (account && user) {
+        // Change _id to id so it matches the next auth user interface
+        user.id = user._id as string;
+        
         // Return all the user properties from the database except the password
+        delete user._id;
         delete user.password;
         token.accessToken = account.access_token;
         token.user = user;
@@ -75,7 +79,7 @@ export default NextAuth({
       return token;
     },
     session: async ({ session, token }) => {
-      session.user = token.user;
+      session.user = token.user as User;
 
       return session;
     }
