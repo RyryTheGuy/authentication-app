@@ -1,19 +1,24 @@
 import React from 'react';
-import { Session, User } from 'next-auth';
 import Image from 'next/image';
 import devChallengeLogo from '../../public/devchallenges.svg';
 import missingPfp from '../../public/new-user-icon.png';
 import styles from './Navbar.module.css';
 import utilStyles from '../../styles/util.module.css';
-import Script from 'next/script';
 import { UserDropdown } from '../UserDropdown/UserDropdown';
+import { useSession } from 'next-auth/react';
+import Script from 'next/script';
 
-export default function Navbar( { user }: { user: User } ) {
+export default function Navbar() {
   const [ isDropdownActive, setIsDropdownActive ] = React.useState<boolean>( false );
+  const { data: session, status } = useSession();
 
   const renderDropdownArrow = () => isDropdownActive
     ? <i className="fas fa-angle-up" style={{ marginBottom: '-3px' }}></i>
     : <i className="fas fa-angle-down" style={{ marginBottom: '-3px' }}></i>;
+
+  if ( status === 'loading' ) {
+    return <div>loading...</div>    // todo: better profile loading
+  }
 
   return (
     <>
@@ -29,12 +34,14 @@ export default function Navbar( { user }: { user: User } ) {
           <div className={utilStyles[ 'pfp-container--sm' ]}>
             <Image src={missingPfp} alt='Your profile picture' layout='fill' />
           </div>
-          <p>{user.name ?? 'New User'}</p>
+          <p>{session.user.name ?? 'New User'}</p>
           {renderDropdownArrow()}
 
           {/* Dropdown */}
-          {isDropdownActive && <UserDropdown user={user} handleDropdownClose={setIsDropdownActive} />}
+          {isDropdownActive && <UserDropdown user={session.user} handleDropdownClose={setIsDropdownActive} />}
         </div>
+
+        <Script src={process.env.NEXT_PUBLIC_FONTAWESOME_KIT} crossOrigin='anonymous' />
       </nav>
     </>
   )
