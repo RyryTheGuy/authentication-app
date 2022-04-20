@@ -11,8 +11,4 @@ declare module "next-auth" {
       phone?: string,
     } & DefaultSession['user']
   }
-
-  interface User {
-    
-  }
 }
