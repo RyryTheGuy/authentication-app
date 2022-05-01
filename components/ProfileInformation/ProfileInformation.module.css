@@ -53,7 +53,10 @@
 }
 
 .form__cell-info {
-  display: flex;
-  align-items: center;
+  width: 70%;
   padding: .25rem 1rem;
+
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
