@@ -1,0 +1,46 @@
+.form {
+  border: 1px solid lightgray;
+  border-radius: 14px;
+  width: 60vw;
+}
+
+.form__title {
+  display: flex;
+  align-items: center;
+  padding: 2rem 4rem;
+}
+
+.form__title > div:nth-child(1) {
+  width: 80%;
+}
+
+.form__title > div:nth-child(1) h2 {
+  font-size: 1.8rem;
+  font-weight: 400;
+  margin: 0;
+}
+
+.form__title > div:nth-child(1) p {
+  margin: 0;
+}
+
+.form__cell {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.form__cell-title {
+  width: 30%;
+  padding: 2rem 4rem;
+  color: gray;
+}
+
+.form__cell-info {
+  width: 70%;
+  padding: .25rem 1rem;
+
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}

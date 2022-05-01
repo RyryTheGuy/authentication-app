@@ -5,6 +5,7 @@ import Navbar from "../../components/Navbar/Navbar";
 import styles from './[id].module.css';
 import getProfile from "../../lib/profile";
 import { ProfileInformation } from "../../components/ProfileInformation/ProfileInformation";
+import { EditProfileForm } from "../../components/EditProfileForm/EditProfileForm";
 
 export default function Profile( { profile }: { profile: User } ) {
   const [ isEditing, setIsEditing ] = React.useState<boolean>( false );
@@ -14,8 +15,7 @@ export default function Profile( { profile }: { profile: User } ) {
       return <ProfileInformation profile={profile} handleEditClick={() => setIsEditing( true )} />
     }
 
-    return <div onClick={() => setIsEditing( false )}>Edit Me!</div>
-    // return <EditProfileForm profile={profile} handleBackClick={() => setIsEditing( false )} />
+    return <EditProfileForm profile={profile} handleSaveClick={() => setIsEditing( false )} />
   }
 
   return (
@@ -28,8 +28,15 @@ export default function Profile( { profile }: { profile: User } ) {
 
       <div className={styles[ 'profile-info' ]}>
         <header>
-          <h1>Personal Info</h1>
-          <h3>Basic info, like your name and photo</h3>
+          {isEditing
+            ? <div onClick={() => setIsEditing( false )}>Back</div>
+            : (
+              <>
+                <h1>Personal Info</h1>
+                <h3>Basic info, like your name and photo</h3>
+              </>
+            )
+          }
         </header>
 
         {renderProfileInformation()}
