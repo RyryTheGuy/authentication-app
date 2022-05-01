@@ -60,6 +60,7 @@ export default NextAuth({
           image: profile.picture,
           bio: null,
           phone: null,
+          oauth: true,
         }
       }
     }),
