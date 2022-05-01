@@ -26,11 +26,19 @@ export default async function handler(req: NextApiRequest, response: NextApiResp
 
     if (newUser) {
       console.log('Found New User', newUser);
-      return response.status(201).json({ user: newUser, message: 'User found' });
+      return response.status(201).json({ user: newUser });
     }
 
     console.log('Did not find New User', newUser);
-    return response.status(500).json({ user: null, message: 'New User account not found...' }); 
+    return response.status(500).json(
+      { 
+        user: null, 
+        error: {
+          message: 'New Account cannot be created right now...',
+          input: 'email'  // todo: change this
+        }
+      }
+    ); 
   }
 
   // Existing Users have to sign in via email & password
@@ -39,17 +47,33 @@ export default async function handler(req: NextApiRequest, response: NextApiResp
 
   if (!existingUser) {
     console.log('Did not find existing User', existingUser);
-    return response.status(403).json({ user: null, message: 'Invalid email'});
+    return response.status(403).json(
+      { 
+        user: null, 
+        error: {
+          message: 'Invalid Email',
+          input: 'email'
+        }
+      }
+    );
   }
   
   const passwordCheck = await bcrypt.compare(body.password, existingUser.password);
   if (!passwordCheck) {
     console.log('Invalid password', passwordCheck);
-    return response.status(403).json({ user: null, message: 'Invalid password'});
+    return response.status(403).json(
+      { 
+        user: null, 
+        error: {
+          message: 'Invalid Password',
+          input: 'password'
+        }
+      }
+    );
   }
 
   console.log('Found Existing User', existingUser);
-  return response.status(201).json({ user: existingUser, message: 'User found' });
+  return response.status(201).json({ user: existingUser  });
 }
 
 function isNewUser(user: NewUser | ExistingUser): user is NewUser {

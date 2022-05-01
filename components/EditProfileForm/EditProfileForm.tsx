@@ -11,9 +11,6 @@ interface Props {
 }
 
 export function EditProfileForm( { profile, handleSaveClick }: Props ) {
-  const { data: session } = useSession();
-  console.log( 'Session: ', session );
-
   const handleSubmit = ( e: React.FormEvent<HTMLFormElement> ) => {
     e.preventDefault();
     console.log( 'Event:', e );
@@ -45,17 +42,16 @@ export function EditProfileForm( { profile, handleSaveClick }: Props ) {
 
       <div className={styles[ 'form__cell' ]}>
         <label htmlFor="email">Email</label>
-        <input name="email" type={'email'}></input>
+        <input name="email" type={'email'} disabled={profile.oauth}></input>
       </div>
 
       <div className={styles[ 'form__cell' ]}>
-        <label htmlFor="profile-picture">Change Photo</label>
-        <input name="profile-picture"></input>
+        <label htmlFor="password">Password</label>
+        <input name="old-password" type={'password'}></input>
+        <input name="new-password" type={'password'}></input>
       </div>
 
       <div className={styles[ 'form__cell' ]}>
-        <label htmlFor="profile-picture">Change Photo</label>
-        <input name="profile-picture"></input>
         <button type="submit">Save</button>
       </div>
     </form>

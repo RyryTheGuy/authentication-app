@@ -3,17 +3,31 @@ import styles from '../SignUpForm/SignUpForm.module.css';
 import utilStyles from '../../styles/util.module.css';
 import React from "react";
 import { useForm, SubmitHandler } from 'react-hook-form';
+import Router from "next/router";
 
 type Inputs = {
   email: string,
   password: string
 }
 
+interface CustomError {
+  message: string;
+  input: 'email' | 'password';
+}
+
 export function LoginForm() {
-  const { register, handleSubmit, formState: { errors } } = useForm<Inputs>();
+  const { register, handleSubmit, setError, formState: { errors } } = useForm<Inputs>();
   const onSignUpSubmit: SubmitHandler<Inputs> = async ( data ) => {
-    console.log( data );
-    await signIn( 'credentials', { email: data.email, password: data.password, callbackUrl: `${process.env.NEXTAUTH_URL}/` } );
+    const { error, url } = await signIn( 'credentials', { email: data.email, password: data.password, callbackUrl: `${process.env.NEXTAUTH_URL}/`, redirect: false } );
+    // console.log( 'Error: ', error );
+    if ( error ) {
+      const { message, input }: CustomError = JSON.parse( error );
+      setError( input, { type: 'custom', message } );
+    }
+
+    if ( url ) {
+      Router.push( url );
+    }
   };
 
   return (
@@ -38,7 +52,7 @@ export function LoginForm() {
             )}
           />
         </div>
-        {errors.email && <span className={utilStyles[ 'error_message' ]}>{errors.email.message}</span>}
+        {errors.email && <span className={utilStyles[ 'error-message' ]}>{errors.email.message}</span>}
 
         <div className={styles[ 'form-input' ]}>
           <i className={"fas fa-lock " + styles[ 'form-input__icon' ]}></i>

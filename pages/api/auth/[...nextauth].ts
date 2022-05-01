@@ -7,7 +7,10 @@ import { User } from "next-auth";
 
 interface AuthorizationResponse {
   user: null | User;
-  message: string;
+  error?: {
+    message: string,
+    input: string
+  } 
 }
 
 export default NextAuth({
@@ -44,8 +47,8 @@ export default NextAuth({
         if (res.ok && returnedData.user) {
           return returnedData.user;
         }
-        // Return null if user data could not be retrieved
-        return null;
+        // Return an object that will pass error information through to the client-side
+        throw new Error(JSON.stringify(returnedData.error));
       }
     }),
     GoogleProvider({
