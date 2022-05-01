@@ -7,6 +7,7 @@ import utilStyles from '../../styles/util.module.css';
 import { UserDropdown } from '../UserDropdown/UserDropdown';
 import { useSession } from 'next-auth/react';
 import Script from 'next/script';
+import Link from 'next/link';
 
 export default function Navbar() {
   const [ isDropdownActive, setIsDropdownActive ] = React.useState<boolean>( false );
@@ -23,9 +24,11 @@ export default function Navbar() {
   return (
     <>
       <nav className={styles[ 'nav' ]}>
-        <div className={utilStyles[ 'logo-container--sm' ]}>
-          <Image src={devChallengeLogo} alt="Dev Challenge Logo" layout="fill" />
-        </div>
+        <Link href={'/'}>
+          <a className={utilStyles[ 'logo-container--sm' ]}>
+            <Image src={devChallengeLogo} alt="Dev Challenge Logo" layout="fill" />
+          </a>
+        </Link>
         <div
           className={styles[ 'user_dropdown' ]}
           onClick={() => setIsDropdownActive( !isDropdownActive )}
