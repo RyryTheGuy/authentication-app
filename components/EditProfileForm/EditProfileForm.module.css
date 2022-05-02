@@ -4,43 +4,51 @@
   width: 60vw;
 }
 
-.form__title {
+.form-title {
   display: flex;
   align-items: center;
   padding: 2rem 4rem;
 }
 
-.form__title > div:nth-child(1) {
+.form-title > div:nth-child(1) {
   width: 80%;
 }
 
-.form__title > div:nth-child(1) h2 {
+.form-title > div:nth-child(1) h2 {
   font-size: 1.8rem;
   font-weight: 400;
   margin: 0;
 }
 
-.form__title > div:nth-child(1) p {
+.form-title > div:nth-child(1) p {
   margin: 0;
 }
 
-.form__cell {
+.form-cell {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  width: 60%;
+  padding: 1rem 4rem;
+}
+
+.form-cell__input {
+  height: 2rem;
+  border: 1px gray solid;
+  border-radius: 14px;
+  outline: none;
+  font-size: 1.2rem;
+  padding: 1.5rem 1rem;
+  margin: .5rem 0;
   width: 100%;
+  resize: none;
+
+  
 }
 
-.form__cell-title {
-  width: 30%;
-  padding: 2rem 4rem;
-  color: gray;
+textarea.form-cell__input {
+  height: auto;
 }
 
-.form__cell-info {
-  width: 70%;
-  padding: .25rem 1rem;
-
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+.form-cell__input:focus {
+  border: 1px #2F80ED solid;
 }

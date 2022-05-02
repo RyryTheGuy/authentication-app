@@ -11,7 +11,7 @@ declare module "next-auth" {
   interface User {
     id: string,
     email: string,
-    oauth: boolean,
+    oauth: boolean, // Created using Oauth
     image?: string,
     bio?: string,
     phone?: string,
