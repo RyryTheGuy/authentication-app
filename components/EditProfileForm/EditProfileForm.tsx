@@ -1,8 +1,19 @@
 import React from "react";
-import { User } from "next-auth";
+import nextAuth, { User } from "next-auth";
 import Image from "next/image";
 import missingUserImage from '../../public/new-user-icon.png';
 import styles from './EditProfileForm.module.css';
+import { useForm, SubmitHandler } from 'react-hook-form';
+// import { updateProfile } from "../../lib/profile";
+
+export type EditProfileInputs = {
+  name?: string;
+  bio?: string;
+  phone?: string;
+  email: string;
+  currentPassword: string;
+  newPassword?: string;
+}
 
 interface Props {
   profile: User;
@@ -10,16 +21,21 @@ interface Props {
 }
 
 export function EditProfileForm( { profile, handleSaveClick }: Props ) {
-  const [ updatedUser, setUpdatedUser ] = React.useState( { ...profile } );
-  const [ newPassword, setNewPassword ] = React.useState<string>( '' );
+  const { register, handleSubmit, setError, formState: { errors } } = useForm<EditProfileInputs>();
+  const [ profileState, setProfileState ] = React.useState<User>( { ...profile } );
+  // todo: make the form work and test!!!!!!!!!!!!!!!!!!!!!
 
-  const handleSubmit = ( e: React.FormEvent<HTMLFormElement> ) => {
-    e.preventDefault();
-    console.log( 'Event:', e );
+  const onSaveEditedProfile: SubmitHandler<EditProfileInputs> = async ( data ) => {
+    const res = await fetch( '/api/updateProfile', {
+      method: 'PUT',
+      body: JSON.stringify( { oldProfile: profile, updatedInfo: data } ),
+      headers: { "Content-Type": "application/json" }
+    } );
+    // handleSaveClick();
   }
 
   return (
-    <form method="POST" onSubmit={( e ) => handleSubmit( e )} className={styles[ 'form' ]}>
+    <form onSubmit={handleSubmit( onSaveEditedProfile )} className={styles[ 'form' ]}>
       <div className={styles[ 'form-title' ]}>
         <div>
           <h2>Change Info</h2>
@@ -29,36 +45,117 @@ export function EditProfileForm( { profile, handleSaveClick }: Props ) {
 
       <div className={styles[ 'form-cell' ]}>
         <label htmlFor="profile-picture">Change Photo</label>
-        <Image src={updatedUser.image ?? missingUserImage} alt="Your Profile Picture" width={100} height={100} />
+        <div>
+          <Image src={profile.image ?? missingUserImage} alt="Your Profile Picture" width={100} height={100} />
+        </div>
       </div>
 
       <div className={styles[ 'form-cell' ]}>
         <label htmlFor="name">Name</label>
-        <input className={styles[ 'form-cell__input' ]} name="name" type={'text'} value={updatedUser.name} onChange={( { target } ) => setUpdatedUser( { ...updatedUser, name: target.value } )} />
+        <input
+          placeholder="Enter your name..."
+          className={styles[ 'form-cell__input' ]}
+          name="name"
+          type={'text'}
+          value={profileState.name}
+          {...register( 'name' )}
+        />
       </div>
 
       <div className={styles[ 'form-cell' ]}>
         <label htmlFor="bio">Bio</label>
-        <textarea className={styles[ 'form-cell__input' ]} rows={3} name="bio" value={updatedUser.bio} onChange={( { target } ) => setUpdatedUser( { ...updatedUser, bio: target.value } )} />
+        <textarea
+          placeholder="Enter your bio..."
+          className={styles[ 'form-cell__input' ]}
+          rows={3}
+          name="bio"
+          value={profileState.bio}
+          {...register( 'bio' )}
+        />
       </div>
 
       <div className={styles[ 'form-cell' ]}>
         <label htmlFor="phone">Phone</label>
-        <input className={styles[ 'form-cell__input' ]} name="phone" type={'tel'} pattern="/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im" value={updatedUser.phone} onChange={( { target } ) => setUpdatedUser( { ...updatedUser, phone: target.value } )} />
+        <input
+          placeholder="Enter your phone..."
+          className={styles[ 'form-cell__input' ]}
+          name="phone"
+          type={'tel'}
+          pattern='^\+?\d{7,13}'
+          value={profileState.phone}
+          {...register( 'phone' )}
+        />
       </div>
 
       <div className={styles[ 'form-cell' ]}>
         <label htmlFor="email">Email</label>
-        <input className={styles[ 'form-cell__input' ]} name="email" type={'email'} disabled={profile.oauth} value={updatedUser.email} onChange={( { target } ) => setUpdatedUser( { ...updatedUser, email: target.value } )} />
+        <input
+          placeholder="Enter your email..."
+          className={styles[ 'form-cell__input' ]}
+          name="email"
+          type={'email'}
+          disabled={profile.oauth}
+          value={profileState.email}
+          style={errors.email ? { border: '1px solid red' } : {}}
+          {...register(
+            'email',
+            {
+              required: {
+                value: true,
+                message: 'Email is required'
+              }
+            }
+          )}
+        />
+        {errors.email && <span>{errors.email.message}</span>}
       </div>
 
-      <div className={styles[ 'form-cell' ]}>
-        <label htmlFor="password">Current Password</label>
-        <input className={styles[ 'form-cell__input' ]} name="old-password" type={'password'} value={updatedUser.password} onChange={( { target } ) => setUpdatedUser( { ...updatedUser, password: target.value } )} />
+      {/* Only allow password changes on accounts not made with Oauth */}
+      {!profile.oauth && (
+        <div className={styles[ 'form-cell' ]}>
+          <label htmlFor="password">Current Password</label>
+          <input
+            placeholder="Enter your current password..."
+            className={styles[ 'form-cell__input' ]}
+            name="old-password"
+            type={'password'}
+            style={errors.currentPassword ? { border: '1px solid red' } : {}}
+            {...register(
+              'currentPassword',
+              {
+                required: {
+                  value: true,
+                  message: 'Current password is required'
+                },
+                minLength: {
+                  value: 8,
+                  message: 'Your current password is at least 8 characters'
+                }
+              }
+            )}
+          />
+          {errors.currentPassword && <span>{errors.currentPassword.message}</span>}
 
-        <label htmlFor="new-password">New Password</label>
-        <input className={styles[ 'form-cell__input' ]} name="new-password" type={'password'} value={newPassword} onChange={( { target } ) => setNewPassword( target.value )} />
-      </div>
+          <label htmlFor="new-password">New Password</label>
+          <input
+            placeholder="Enter your new password..."
+            className={styles[ 'form-cell__input' ]}
+            name="new-password"
+            type={'password'}
+            style={errors.newPassword ? { border: '1px solid red' } : {}}
+            {...register(
+              'newPassword',
+              {
+                minLength: {
+                  value: 8,
+                  message: 'Your new password must have at least 8 characters'
+                }
+              }
+            )}
+          />
+          {errors.newPassword && <span>{errors.newPassword.message}</span>}
+        </div>
+      )}
 
       <div className={styles[ 'form-cell' ]}>
         <button type="submit">Save</button>

@@ -40,9 +40,15 @@
   padding: 1.5rem 1rem;
   margin: .5rem 0;
   width: 100%;
-  resize: none;
+  resize: none;  
+}
 
-  
+.form-cell__input[type='tel']:invalid {
+  border: 1px red solid;
+}
+
+.form-cell__input[type='tel']:valid {
+  border: 1px green solid;
 }
 
 textarea.form-cell__input {
@@ -51,4 +57,8 @@ textarea.form-cell__input {
 
 .form-cell__input:focus {
   border: 1px #2F80ED solid;
+}
+
+.form-cell__input + span {
+  color: red;
 }

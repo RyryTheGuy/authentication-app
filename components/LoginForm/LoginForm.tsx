@@ -19,13 +19,11 @@ export function LoginForm() {
   const { register, handleSubmit, setError, formState: { errors } } = useForm<Inputs>();
   const onSignUpSubmit: SubmitHandler<Inputs> = async ( data ) => {
     const { error, url } = await signIn( 'credentials', { email: data.email, password: data.password, callbackUrl: `${process.env.NEXTAUTH_URL}/`, redirect: false } );
-    // console.log( 'Error: ', error );
+
     if ( error ) {
       const { message, input }: CustomError = JSON.parse( error );
       setError( input, { type: 'custom', message } );
-    }
-
-    if ( url ) {
+    } else if ( url ) {
       Router.push( url );
     }
   };
