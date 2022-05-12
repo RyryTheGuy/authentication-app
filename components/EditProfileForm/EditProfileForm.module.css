@@ -31,6 +31,43 @@
   padding: 1rem 4rem;
 }
 
+.form-cell--flex-row {
+  display: flex;
+  align-items: center;
+  width: 60%;
+  padding: 1rem 4rem;
+}
+
+.form-cell--flex-row > label {
+  padding: 0 2rem;
+}
+
+.image-input {
+  position: relative;
+  width: 100px;
+  height: 100px;
+}
+
+.image-input:hover {
+  cursor: pointer;
+}
+
+.image-input-overlay {
+  visibility: hidden;
+
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background: rgba(0, 0, 0, .15);
+  z-index: 100;
+}
+
+.image-input:hover > .image-input-overlay {
+  visibility: visible;
+}
+
 .form-cell__input {
   height: 2rem;
   border: 1px gray solid;

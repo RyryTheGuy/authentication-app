@@ -4,9 +4,9 @@ import Image from "next/image";
 import missingUserImage from '../../public/new-user-icon.png';
 import styles from './EditProfileForm.module.css';
 import { useForm, SubmitHandler } from 'react-hook-form';
-// import { updateProfile } from "../../lib/profile";
 
 export type EditProfileInputs = {
+  image?: FileList;
   name?: string;
   bio?: string;
   phone?: string;
@@ -23,7 +23,20 @@ interface Props {
 export function EditProfileForm( { profile, handleSaveClick }: Props ) {
   const { register, handleSubmit, setError, formState: { errors } } = useForm<EditProfileInputs>();
   const [ profileState, setProfileState ] = React.useState<User>( { ...profile } );
-  // todo: make the form work and test!!!!!!!!!!!!!!!!!!!!!
+  const [ selectedFile, setSelectedFile ] = React.useState( null );
+  const [ preview, setPreview ] = React.useState( null );
+
+  React.useEffect( () => {
+    if ( !selectedFile ) {
+      setPreview( undefined );
+      return;
+    }
+
+    const objectUrl: string = URL.createObjectURL( selectedFile );
+    setPreview( objectUrl );
+
+    return () => URL.revokeObjectURL( objectUrl );
+  }, [ selectedFile ] )
 
   const onSaveEditedProfile: SubmitHandler<EditProfileInputs> = async ( data ) => {
     const res = await fetch( '/api/updateProfile', {
@@ -32,6 +45,12 @@ export function EditProfileForm( { profile, handleSaveClick }: Props ) {
       headers: { "Content-Type": "application/json" }
     } );
     // handleSaveClick();
+  }
+
+  const selectProfilePictureSource = () => {
+    if ( preview ) return preview;
+    if ( profileState.image ) return profileState.image;
+    return missingUserImage;
   }
 
   return (
@@ -43,11 +62,26 @@ export function EditProfileForm( { profile, handleSaveClick }: Props ) {
         </div>
       </div>
 
-      <div className={styles[ 'form-cell' ]}>
-        <label htmlFor="profile-picture">Change Photo</label>
-        <div>
-          <Image src={profile.image ?? missingUserImage} alt="Your Profile Picture" width={100} height={100} />
+      <div className={styles[ 'form-cell--flex-row' ]}>
+        <div className={styles[ 'image-input' ]}>
+          <Image
+            src={selectProfilePictureSource()}
+            alt="Your Profile Picture"
+            width={100}
+            height={100}
+          />
+          <div
+            className={styles[ 'image-input-overlay' ]}
+            onClick={() => document.getElementById( 'new-profile-picture' ).click()}></div>
         </div>
+        <label htmlFor="profile-picture">Change Photo</label>
+        <input
+          id="new-profile-picture"
+          type='file'
+          style={{ display: 'none' }}
+          onInput={( e ) => setSelectedFile( e.currentTarget.files[ 0 ] )}
+          {...register( 'image' )}
+        />
       </div>
 
       <div className={styles[ 'form-cell' ]}>
